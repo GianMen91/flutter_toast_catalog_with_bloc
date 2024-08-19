@@ -1,0 +1,116 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import '../enums/sorting_option.dart';
+import '../models/item.dart';
+import '../models/storage.dart';
+
+abstract class ItemEvent {}
+
+class LoadItemsEvent extends ItemEvent {}
+
+class SearchItemsEvent extends ItemEvent {
+  final String searchQuery;
+  SearchItemsEvent(this.searchQuery);
+}
+
+class SortItemsEvent extends ItemEvent {
+  final SortingOption sortingOption;
+  SortItemsEvent(this.sortingOption);
+}
+
+abstract class ItemState {}
+
+class ItemsLoading extends ItemState {}
+
+class ItemsLoaded extends ItemState {
+  final List<Item> items;
+  ItemsLoaded(this.items);
+}
+
+class ItemsError extends ItemState {
+  final String message;
+  ItemsError(this.message);
+}
+
+class ItemBloc extends Bloc<ItemEvent, ItemState> {
+  final Storage storage;
+  List<Item>? _itemList;
+
+  ItemBloc(this.storage) : super(ItemsLoading()) {
+    on<LoadItemsEvent>(_onLoadItems);
+    on<SearchItemsEvent>(_onSearchItems);
+    on<SortItemsEvent>(_onSortItems);
+  }
+
+  Future<void> _onLoadItems(LoadItemsEvent event, Emitter<ItemState> emit) async {
+    emit(ItemsLoading());
+    try {
+      String content = await storage.readFromFile();
+      if (content != 'no file available') {
+        _itemList = _getListFromData(content);
+      }
+
+      if (_itemList == null || _itemList!.isEmpty) {
+        await _downloadItems();
+      }
+      emit(ItemsLoaded(_itemList!));
+    } catch (e) {
+      emit(ItemsError('Failed to load items: ${e.toString()}'));
+    }
+  }
+
+  void _onSearchItems(SearchItemsEvent event, Emitter<ItemState> emit) {
+    if (_itemList != null) {
+      List<Item> filteredItems = _itemList!
+          .where((item) => item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
+          .toList();
+      emit(ItemsLoaded(filteredItems));
+    }
+  }
+
+  void _onSortItems(SortItemsEvent event, Emitter<ItemState> emit) {
+    if (_itemList != null) {
+      _itemList?.sort((a, b) {
+        switch (event.sortingOption) {
+          case SortingOption.name:
+            return a.name.compareTo(b.name);
+          case SortingOption.lastSold:
+            return a.lastSold.compareTo(b.lastSold);
+          case SortingOption.price:
+            return a.price.compareTo(b.price);
+          default:
+            return 0;
+        }
+      });
+      emit(ItemsLoaded(List.from(_itemList!))); // Emit a new list instance to ensure UI updates
+    }
+  }
+
+  Future<void> _downloadItems() async {
+    const url = 'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
+
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        String responseResult = response.body;
+        _itemList = _getListFromData(responseResult);
+        storage.writeToFile(response.body);
+      } else {
+        throw Exception('Error occurred');
+      }
+    } on SocketException {
+      throw Exception('Impossible to download the items from the server.\nCheck your internet connection and retry!');
+    }
+  }
+
+  List<Item> _getListFromData(String response) {
+    final Map<String, dynamic> responseData = json.decode(response);
+    final List<dynamic> items = responseData['items'];
+    return items.map((item) => Item.fromJson(item)).toList();
+  }
+}
