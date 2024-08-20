@@ -1,7 +1,6 @@
 // Importing necessary packages and dependencies for testing Flutter code
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/item_manager.dart';
 import 'package:flutter_toast_catalog_with_bloc/src/screens/item_screen.dart';
 import 'package:flutter_toast_catalog_with_bloc/src/widgets/search_box.dart';
 
@@ -20,7 +19,6 @@ void main() {
 
       // Verify that the initial state shows the SearchBox and ItemManager
       expect(find.byType(SearchBox), findsOneWidget);
-      expect(find.byType(ItemManager), findsOneWidget);
 
       // Tap the sorting menu button
       await tester.tap(find.byIcon(Icons.sort_by_alpha_rounded));

@@ -96,7 +96,7 @@ class ItemCard extends StatelessWidget {
                       child: Text(
                         "Last Sold: $formattedLastSold",
                         key: const Key("item_last_sold_text"),
-                        style: Theme.of(context).textTheme.button,
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
                     // Display item price
@@ -108,7 +108,7 @@ class ItemCard extends StatelessWidget {
                       child: Text(
                         "Price: $price",
                         key: const Key("item_price_text"),
-                        style: Theme.of(context).textTheme.button,
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
                   ],

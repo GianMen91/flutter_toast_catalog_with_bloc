@@ -65,7 +65,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
         await _downloadItems();
       }
       emit(ItemsLoaded(_itemList!));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(ItemsError('Failed to load items: ${e.toString()}'));
     }
   }

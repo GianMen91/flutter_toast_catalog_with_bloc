@@ -1,13 +1,13 @@
 // Importing necessary packages and dependencies for testing Flutter code
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/data/item.dart';
+import 'package:flutter_toast_catalog_with_bloc/src/models/item.dart';
 import 'package:flutter_toast_catalog_with_bloc/src/widgets/item_card.dart';
 
 // Main test function to test the ItemCard widget
 void main() {
-
-  testWidgets('All elements of ItemCard Widget are displayed correctly', (WidgetTester tester) async {
+  testWidgets('All elements of ItemCard Widget are displayed correctly',
+      (WidgetTester tester) async {
     // Creating a test item for the ItemCard widget
     final Item testItem = Item(
       name: 'Test Item',
@@ -57,7 +57,8 @@ void main() {
   });
 
   // Test title: Test different currency
-  testWidgets('If the currency is not "EUR", append the currency to the price', (WidgetTester tester) async {
+  testWidgets('If the currency is not "EUR", append the currency to the price',
+      (WidgetTester tester) async {
     // Creating a test item with a different currency for the ItemCard widget
     final Item testItem = Item(
       name: 'Test Item',

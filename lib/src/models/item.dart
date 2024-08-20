@@ -53,7 +53,7 @@ class Item {
     return 0.0;
   }
 
-  // Private method to parse a dynamic value into a DateTime, handling exceptions
+  // Private method to parse a dynamic value into a DateTime
   static DateTime _parseDateTime(dynamic value) {
     if (value is String) {
       try {

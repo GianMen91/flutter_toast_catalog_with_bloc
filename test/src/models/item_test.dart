@@ -1,7 +1,7 @@
 // Importing necessary packages and dependencies for testing Dart code
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/data/item.dart';
+import 'package:flutter_toast_catalog_with_bloc/src/models/item.dart';
 
 // Main test function to test the Item class
 void main() {
@@ -11,7 +11,8 @@ void main() {
     test('Item.fromJson should create an Item instance from JSON', () {
       // Sample JSON response representing an item
       const response =
-          '[{"name":"Avocado Toast","price":"5.99","id":1,"currency":"EUR","last_sold":"2020-11-28T15:14:22Z"}]';
+          '[{"name":"Avocado Toast","price":"5.99","id":1,"currency":"EUR",'
+          '"last_sold":"2020-11-28T15:14:22Z"}]';
 
       // Decoding the JSON response and mapping it to create an Item instance
       final List<dynamic> responseData = json.decode(response);

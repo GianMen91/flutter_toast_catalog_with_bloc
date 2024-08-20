@@ -43,7 +43,8 @@ class ItemScreen extends StatelessWidget {
                     BlocBuilder<ItemBloc, ItemState>(
                       builder: (context, state) {
                         if (state is ItemsLoading) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(child:
+                          CircularProgressIndicator());
                         } else if (state is ItemsLoaded) {
                           return _itemListView(state.items);
                         } else if (state is ItemsError) {

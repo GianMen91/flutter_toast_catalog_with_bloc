@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'src/bloc/item_bloc.dart';
-import 'src/constants/constants.dart';
 import 'src/models/storage.dart';
 import 'src/screens/item_screen.dart';
 
