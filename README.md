@@ -12,7 +12,7 @@ The app allows users to explore, sort, and search through items in an intuitive 
 ## Screenshots
 
 <img src="img/img-1.png" width=300 /> <img src="img/img-2.png" width=300 /> 
-<img src="img/img-3.png" width=300 /> <img src="img/img-4.png" width=300 /> 
+<img src="img/img-3.png" width=300 /> 
 
 ## Features
 
