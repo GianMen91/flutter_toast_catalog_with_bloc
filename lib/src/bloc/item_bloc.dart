@@ -14,11 +14,13 @@ class LoadItemsEvent extends ItemEvent {}
 
 class SearchItemsEvent extends ItemEvent {
   final String searchQuery;
+
   SearchItemsEvent(this.searchQuery);
 }
 
 class SortItemsEvent extends ItemEvent {
   final SortingOption sortingOption;
+
   SortItemsEvent(this.sortingOption);
 }
 
@@ -28,17 +30,21 @@ class ItemsLoading extends ItemState {}
 
 class ItemsLoaded extends ItemState {
   final List<Item> items;
+
   ItemsLoaded(this.items);
 }
 
 class ItemsError extends ItemState {
   final String message;
+
   ItemsError(this.message);
 }
 
 class ItemBloc extends Bloc<ItemEvent, ItemState> {
   final Storage storage;
   List<Item>? _itemList;
+  static const apiURL =
+      'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
 
   ItemBloc(this.storage) : super(ItemsLoading()) {
     on<LoadItemsEvent>(_onLoadItems);
@@ -46,7 +52,8 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     on<SortItemsEvent>(_onSortItems);
   }
 
-  Future<void> _onLoadItems(LoadItemsEvent event, Emitter<ItemState> emit) async {
+  Future<void> _onLoadItems(
+      LoadItemsEvent event, Emitter<ItemState> emit) async {
     emit(ItemsLoading());
     try {
       String content = await storage.readFromFile();
@@ -66,7 +73,8 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
   void _onSearchItems(SearchItemsEvent event, Emitter<ItemState> emit) {
     if (_itemList != null) {
       List<Item> filteredItems = _itemList!
-          .where((item) => item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
+          .where((item) =>
+              item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
           .toList();
       emit(ItemsLoaded(filteredItems));
     }
@@ -86,15 +94,14 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
             return 0;
         }
       });
-      emit(ItemsLoaded(List.from(_itemList!))); // Emit a new list instance to ensure UI updates
+      emit(ItemsLoaded(List.from(
+          _itemList!))); // Emit a new list instance to ensure UI updates
     }
   }
 
   Future<void> _downloadItems() async {
-    const url = 'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
-
     try {
-      http.Response response = await http.get(Uri.parse(url));
+      http.Response response = await http.get(Uri.parse(apiURL));
 
       if (response.statusCode == 200) {
         String responseResult = response.body;
@@ -104,7 +111,9 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
         throw Exception('Error occurred');
       }
     } on SocketException {
-      throw Exception('Impossible to download the items from the server.\nCheck your internet connection and retry!');
+      throw Exception(
+          'Impossible to download the items from the server.\n'
+              'Check your internet connection and retry!');
     }
   }
 
