@@ -1,4 +1,4 @@
-# Toast Catalog
+# Toast Catalog using BLoC and sqflite
 
 ## Overview
 
