@@ -14,32 +14,51 @@ class ItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
-      body: Column(
-        children: [
-          SearchBox(
-            onChanged: (query) {
-              BlocProvider.of<ItemBloc>(context).add(SearchItemsEvent(query));
-            },
+        appBar: buildAppBar(context),
+        backgroundColor: appMainColor,
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: <Widget>[
+              SearchBox(
+                onChanged: (query) {
+                  BlocProvider.of<ItemBloc>(context)
+                      .add(SearchItemsEvent(query));
+                },
+              ),
+              const SizedBox(height: defaultPadding / 2),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 70),
+                      decoration: const BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                      ),
+                    ),
+                    BlocBuilder<ItemBloc, ItemState>(
+                      builder: (context, state) {
+                        if (state is ItemsLoading) {
+                          return const Center(child: CircularProgressIndicator());
+                        } else if (state is ItemsLoaded) {
+                          return _itemListView(state.items);
+                        } else if (state is ItemsError) {
+                          return Center(child: Text(state.message));
+                        } else {
+                          return const Center(child: Text('Unknown state'));
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: BlocBuilder<ItemBloc, ItemState>(
-              builder: (context, state) {
-                if (state is ItemsLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is ItemsLoaded) {
-                  return _itemListView(state.items);
-                } else if (state is ItemsError) {
-                  return Center(child: Text(state.message));
-                } else {
-                  return const Center(child: Text('Unknown state'));
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _itemListView(List<Item> items) {
