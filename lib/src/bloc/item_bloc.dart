@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
-import '../enums/sorting_option.dart';
 import '../models/item.dart';
-import '../models/storage.dart';
+import '../database/database_helper.dart';
+import '../enums/sorting_option.dart';
+import 'item_event.dart';
+import 'item_state.dart';
 
 abstract class ItemEvent {}
 
@@ -41,12 +43,12 @@ class ItemsError extends ItemState {
 }
 
 class ItemBloc extends Bloc<ItemEvent, ItemState> {
-  final Storage storage;
+  final DatabaseHelper _dbHelper = DatabaseHelper();
   List<Item>? _itemList;
   static const apiURL =
       'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
 
-  ItemBloc(this.storage) : super(ItemsLoading()) {
+  ItemBloc() : super(ItemsLoading()) {
     on<LoadItemsEvent>(_onLoadItems);
     on<SearchItemsEvent>(_onSearchItems);
     on<SortItemsEvent>(_onSortItems);
@@ -56,11 +58,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
       LoadItemsEvent event, Emitter<ItemState> emit) async {
     emit(ItemsLoading());
     try {
-      String content = await storage.readFromFile();
-      if (content != 'no file available') {
-        _itemList = _getListFromData(content);
-      }
-
+      _itemList = await _dbHelper.getItems();
       if (_itemList == null || _itemList!.isEmpty) {
         await _downloadItems();
       }
@@ -74,7 +72,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     if (_itemList != null) {
       List<Item> filteredItems = _itemList!
           .where((item) =>
-              item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
+          item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
           .toList();
       emit(ItemsLoaded(filteredItems));
     }
@@ -106,7 +104,12 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
       if (response.statusCode == 200) {
         String responseResult = response.body;
         _itemList = _getListFromData(responseResult);
-        storage.writeToFile(response.body);
+
+        // Insert items into the database
+        await _dbHelper.deleteAllItems();
+        for (var item in _itemList!) {
+          await _dbHelper.insertItem(item);
+        }
       } else {
         throw Exception('Error occurred');
       }
