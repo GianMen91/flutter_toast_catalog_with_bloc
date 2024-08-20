@@ -1,11 +1,15 @@
+// ignore_for_file: avoid_print
+
 // Importing necessary packages and dependencies for testing Dart code
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_toast_catalog_with_bloc/src/models/item.dart';
 
+import 'package:test_api/src/backend/invoker.dart';
+import 'package:test_api/src/backend/state.dart' as test_api;
+
 // Main test function to test the Item class
 void main() {
-
   group('Item Class Tests', () {
     // Test to ensure Item.fromJson creates an Item instance from JSON
     test('Item.fromJson should create an Item instance from JSON', () {
@@ -54,5 +58,22 @@ void main() {
       // Assertion to verify the correct formatting of lastSold date
       expect(item.formattedLastSold(), '01 January 2022');
     });
+  });
+
+  print("## Item Class Test");
+
+  tearDown(() {
+    String result;
+    String testName = Invoker.current!.liveTest.test.name;
+    String testGroupName = Invoker.current!.liveTest.groups[1].name;
+
+    testName = testName.replaceFirst("$testGroupName ", "");
+
+    if (Invoker.current!.liveTest.state.result == test_api.Result.error) {
+      result = "- :no_entry_sign: $testName";
+    } else {
+      result = "- [x] $testName";
+    }
+    print(result);
   });
 }

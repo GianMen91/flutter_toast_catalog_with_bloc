@@ -7,8 +7,6 @@ import 'package:http/http.dart' as http;
 import '../models/item.dart';
 import '../database/database_helper.dart';
 import '../enums/sorting_option.dart';
-import 'item_event.dart';
-import 'item_state.dart';
 
 abstract class ItemEvent {}
 

@@ -46,6 +46,8 @@ dependencies:
   flutter_bloc: ^8.1.6
   equatable: ^2.0.5
   sqflite: ^2.3.3+1
+  test_api: ^0.6.1
+  sqflite_common_ffi: ^2.3.3
 
 dev_dependencies:
   flutter_test:
