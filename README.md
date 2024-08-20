@@ -1,7 +1,12 @@
 # Toast Catalog
 
 ## Overview
-Welcome to Toast Catalog, a Flutter app designed for managing and displaying a dynamic list of items sourced from an external API. This app empowers users to explore, sort, and search for items in an intuitive and user-friendly interface.
+
+This project is based on https://github.com/GianMen91/flutter_toast_catalog, but it has been redeveloped using BLoC and sqflite.
+It features a toast catalog created in Flutter that displays a dynamic list of toasts fetched from the external API :
+https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json.
+
+The app allows users to explore, sort, and search through items in an intuitive and user-friendly interface.
 
 ## Screenshots
 
@@ -17,7 +22,6 @@ Welcome to Toast Catalog, a Flutter app designed for managing and displaying a d
 - **API Integration**: Connects to an external API to fetch the latest item data.
 - **Connection Status Check**: Dynamically assesses internet connectivity, providing an error notification if unable to connect to the server.
 - **Fallback to Offline Mode**: In the absence of a connection, the app intelligently switches to displaying items from the offline list.
-- **Pull-to-Refresh**: Update the item list by pulling down on the screen.
 - **Custom Fonts**: Enhance the visual appeal with the Niconne custom font.
 
 ## Content Attribution
@@ -28,9 +32,10 @@ Welcome to Toast Catalog, a Flutter app designed for managing and displaying a d
 - **Flutter**: Framework for building natively compiled applications.
 - **Dart**: Language used to build Flutter applications.
 - **HTTP Package**: Used for making HTTP requests to download item data.
-- **Storage Package**: Used for reading/writing data locally.
 - **Linting**: The codebase adheres to best practices and coding standards using lint rules.
 - **Widget Tests**: Extensive use of widget tests to ensure the robustness of the UI components, behaviors, and overall application functionality.
+- **BLoC**: Business Logic Component pattern for state management, providing a clear separation between business logic and UI.
+- **sqflite**: SQLite plugin for Flutter used for local database storage.
 
 ## Responsiveness
 
