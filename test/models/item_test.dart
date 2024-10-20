@@ -3,7 +3,7 @@
 // Importing necessary packages and dependencies for testing Dart code
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/models/toast.dart';
+import 'package:flutter_toast_catalog_with_bloc/models/toast.dart';
 
 import 'package:test_api/src/backend/invoker.dart';
 import 'package:test_api/src/backend/state.dart' as test_api;
@@ -20,8 +20,8 @@ void main() {
 
       // Decoding the JSON response and mapping it to create an Item instance
       final List<dynamic> responseData = json.decode(response);
-      final List<Item> item =
-          responseData.map((item) => Item.fromJson(item)).toList();
+      final List<Toast> item =
+          responseData.map((item) => Toast.fromJson(item)).toList();
 
       // Assertions to verify the correctness of the created Item instance
       expect(item[0].id, 1);
@@ -34,7 +34,7 @@ void main() {
     // Test to ensure Item.empty creates an empty Item instance
     test('Item.empty should create an empty Item instance', () {
       // Creating an empty Item instance
-      final emptyItem = Item.empty();
+      final emptyItem = Toast.empty();
 
       // Assertions to verify the correctness of the empty Item instance
       expect(emptyItem.id, 0);
@@ -47,7 +47,7 @@ void main() {
     // Test to ensure Item.formattedLastSold formats the lastSold date correctly
     test('Item.formattedLastSold should format lastSold date', () {
       // Creating an Item instance with a specific lastSold date
-      final item = Item(
+      final item = Toast(
         id: 1,
         name: 'Sample Item',
         price: 10.99,

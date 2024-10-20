@@ -4,9 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/bloc/toast_bloc.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/screens/toast_catalog_view.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/widgets/search_box.dart';
+import 'package:flutter_toast_catalog_with_bloc/bloc/toast_bloc.dart';
+import 'package:flutter_toast_catalog_with_bloc/repository/toast_repository.dart';
+import 'package:flutter_toast_catalog_with_bloc/view/toast_catalog_view.dart';
+import 'package:flutter_toast_catalog_with_bloc/widgets/search_box.dart';
 
 import 'package:test_api/src/backend/invoker.dart';
 import 'package:test_api/src/backend/state.dart' as test_api;
@@ -15,15 +16,16 @@ import 'package:test_api/src/backend/state.dart' as test_api;
 void main() {
   group('ItemScreen Tests', () {
     testWidgets('ItemScreen UI Test', (WidgetTester tester) async {
+      final toastRepository = ToastRepository();
       // Create an instance of the ItemBloc
-      final itemBloc = ItemBloc();
+      final toastBloc = ToastBloc(itemApiCall: toastRepository);
 
       // Build our app and trigger a frame
       await tester.pumpWidget(
-        BlocProvider<ItemBloc>.value(
-          value: itemBloc,
+        BlocProvider<ToastBloc>.value(
+          value: toastBloc,
           child: const MaterialApp(
-            home: ItemScreen(),
+            home: ToastCatalogView(),
           ),
         ),
       );
@@ -50,7 +52,7 @@ void main() {
       expect(sortByPriceItemMenu, findsOneWidget);
 
       // Clean up the bloc
-      itemBloc.close();
+      toastBloc.close();
     });
   });
 

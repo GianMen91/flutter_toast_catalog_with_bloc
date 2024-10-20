@@ -3,8 +3,8 @@
 // Importing necessary packages and dependencies for testing Flutter code
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/models/toast.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/widgets/toast_card.dart';
+import 'package:flutter_toast_catalog_with_bloc/models/toast.dart';
+import 'package:flutter_toast_catalog_with_bloc/widgets/toast_card.dart';
 
 import 'package:test_api/src/backend/invoker.dart';
 import 'package:test_api/src/backend/state.dart' as test_api;
@@ -15,7 +15,7 @@ void main() {
     testWidgets('All elements of ItemCard Widget are displayed correctly',
         (WidgetTester tester) async {
       // Creating a test item for the ItemCard widget
-      final Item testItem = Item(
+      final Toast testItem = Toast(
         name: 'Test Item',
         lastSold: DateTime.now(),
         price: 10.0,
@@ -27,7 +27,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ItemCard(
+            body: ToastCard(
               itemIndex: 1,
               item: testItem,
             ),
@@ -67,7 +67,7 @@ void main() {
         'If the currency is not "EUR", append the currency to the price',
         (WidgetTester tester) async {
       // Creating a test item with a different currency for the ItemCard widget
-      final Item testItem = Item(
+      final Toast testItem = Toast(
         name: 'Test Item',
         lastSold: DateTime.now(),
         price: 10.0,
@@ -79,7 +79,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ItemCard(
+            body: ToastCard(
               itemIndex: 1,
               item: testItem,
             ),

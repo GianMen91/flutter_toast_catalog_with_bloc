@@ -6,7 +6,7 @@ import 'package:test_api/src/backend/state.dart' as test_api;
 // Importing necessary packages and files
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/widgets/search_box.dart';
+import 'package:flutter_toast_catalog_with_bloc/widgets/search_box.dart';
 
 // The main entry point for the test suite
 void main() {

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Importing constants from the Flutter Toast Catalog
-import 'package:flutter_toast_catalog_with_bloc/src/constants/constants.dart';
+import 'package:flutter_toast_catalog_with_bloc/constants/constants.dart';
 
 import 'package:test_api/src/backend/invoker.dart';
 import 'package:test_api/src/backend/state.dart' as test_api;
