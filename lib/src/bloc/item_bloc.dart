@@ -6,47 +6,9 @@ import 'package:http/http.dart' as http;
 
 import '../models/item.dart';  // Importing the Item model.
 import '../database/database_helper.dart';  // Importing the database helper for local storage operations.
-import '../enums/sorting_option.dart';  // Importing sorting options enumeration.
-
-// Abstract class representing different types of events that can be handled by ItemBloc.
-abstract class ItemEvent {}
-
-// Event to load items from either local storage or from the API.
-class LoadItemsEvent extends ItemEvent {}
-
-// Event to search for items based on a search query.
-class SearchItemsEvent extends ItemEvent {
-  final String searchQuery;
-
-  SearchItemsEvent(this.searchQuery);
-}
-
-// Event to sort items based on a selected sorting option.
-class SortItemsEvent extends ItemEvent {
-  final SortingOption sortingOption;
-
-  SortItemsEvent(this.sortingOption);
-}
-
-// Abstract class representing different states of the ItemBloc.
-abstract class ItemState {}
-
-// State indicating that items are currently being loaded.
-class ItemsLoading extends ItemState {}
-
-// State representing that items have been successfully loaded.
-class ItemsLoaded extends ItemState {
-  final List<Item> items;
-
-  ItemsLoaded(this.items);
-}
-
-// State representing an error occurred while loading items.
-class ItemsError extends ItemState {
-  final String message;
-
-  ItemsError(this.message);
-}
+import '../enums/sorting_option.dart';
+import 'item_event.dart';
+import 'item_state.dart';  // Importing sorting options enumeration.
 
 // BLoC for managing the state and events related to items.
 class ItemBloc extends Bloc<ItemEvent, ItemState> {

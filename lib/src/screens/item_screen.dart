@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Importing necessary files for BLoC, constants, enums, models, and widgets.
 import '../bloc/item_bloc.dart';
+import '../bloc/item_event.dart';
+import '../bloc/item_state.dart';
 import '../constants/constants.dart';
 import '../enums/sorting_option.dart';
 import '../models/item.dart';
