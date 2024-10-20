@@ -12,8 +12,8 @@ import '../widgets/item_card.dart';
 import '../widgets/search_box.dart';
 
 // Main screen widget displaying a list of items.
-class ItemScreen extends StatelessWidget {
-  const ItemScreen({super.key});
+class ItemView extends StatelessWidget {
+  const ItemView({super.key});
 
   @override
   Widget build(BuildContext context) {
