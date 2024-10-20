@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/bloc/item_event.dart';
+import 'package:flutter_toast_catalog_with_bloc/screens/item_screen.dart';
 
-import 'src/bloc/item_bloc.dart';  // Importing the BLoC for managing state.
-import 'src/screens/item_screen.dart';  // Importing the screen where items will be displayed.
+import 'bloc/item_bloc.dart';
+import 'bloc/item_event.dart';
 
 void main() {
   runApp(
