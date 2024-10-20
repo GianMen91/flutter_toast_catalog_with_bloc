@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-import '../models/item.dart';
+import '../models/toast.dart';
 
-class ItemRepository {
+class ToastRepository {
 
   static const apiURL =  // URL to fetch items from an external API.
       'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
 
   // Fetch items from the API and store them in local storage.
-  Future<List<Item>> fetchItems() async {
+  Future<List<Toast>> fetchItems() async {
     try {
       http.Response response = await http.get(Uri.parse(apiURL));  // Make an HTTP GET request to the API.
 
@@ -29,10 +29,10 @@ class ItemRepository {
   }
 
   // Convert JSON response to a list of Item objects.
-  List<Item> _getListFromData(String response) {
+  List<Toast> _getListFromData(String response) {
     final Map<String, dynamic> responseData = json.decode(response);  // Decode the JSON response.
     final List<dynamic> items = responseData['items'];  // Extract the list of items from the response.
-    return items.map((item) => Item.fromJson(item)).toList();  // Convert each item to an Item object and return the list.
+    return items.map((item) => Toast.fromJson(item)).toList();  // Convert each item to an Item object and return the list.
   }
 
 }

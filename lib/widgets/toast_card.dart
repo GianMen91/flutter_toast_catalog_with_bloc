@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../constants/constants.dart';
-import '../models/item.dart';
+import '../models/toast.dart';
 
 
 // Represents a card widget for displaying an item
-class ItemCard extends StatelessWidget {
-  const ItemCard({
+class ToastCard extends StatelessWidget {
+  const ToastCard({
     super.key,
     required this.itemIndex,
     required this.item,
   });
 
   final int itemIndex; // Index of the item
-  final Item item; // Item to be displayed on the card
+  final Toast item; // Item to be displayed on the card
 
   @override
   Widget build(BuildContext context) {

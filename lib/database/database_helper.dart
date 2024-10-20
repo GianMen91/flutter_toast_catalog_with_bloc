@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../models/item.dart';
+import '../models/toast.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -37,21 +37,21 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<int> insertItem(Item item) async {
+  Future<int> insertItem(Toast item) async {
     final db = await database;
     return await db.insert('items', item.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<Item>> getItems() async {
+  Future<List<Toast>> getItems() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('items');
     return List.generate(maps.length, (i) {
-      return Item.fromJson(maps[i]);
+      return Toast.fromJson(maps[i]);
     });
   }
 
-  Future<int> updateItem(Item item) async {
+  Future<int> updateItem(Toast item) async {
     final db = await database;
     return await db.update('items', item.toJson(),
         where: 'id = ?', whereArgs: [item.id]);

@@ -3,7 +3,7 @@
 // Importing necessary packages and dependencies for testing Dart code
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog_with_bloc/src/models/item.dart';
+import 'package:flutter_toast_catalog_with_bloc/src/models/toast.dart';
 
 import 'package:test_api/src/backend/invoker.dart';
 import 'package:test_api/src/backend/state.dart' as test_api;

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Importing necessary files for BLoC, constants, enums, models, and widgets.
-import '../bloc/item_bloc.dart';
-import '../bloc/item_event.dart';
-import '../bloc/item_state.dart';
+import '../bloc/toast_bloc.dart';
+import '../bloc/toast_event.dart';
+import '../bloc/toast_state.dart';
 import '../constants/constants.dart';
 import '../enums/sorting_option.dart';
-import '../models/item.dart';
-import '../widgets/item_card.dart';
+import '../models/toast.dart';
+import '../widgets/toast_card.dart';
 import '../widgets/search_box.dart';
 
 // Main screen widget displaying a list of items.
-class ItemView extends StatelessWidget {
-  const ItemView({super.key});
+class ToastCatalogView extends StatelessWidget {
+  const ToastCatalogView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final itemBloc = BlocProvider.of<ItemBloc>(context);
+    final itemBloc = BlocProvider.of<ToastBloc>(context);
 
     itemBloc.add(LoadItemsEvent());
     return Scaffold(
@@ -55,10 +55,10 @@ class ItemView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BlocBuilder<ItemBloc, ItemState>(
+                  BlocBuilder<ToastBloc, ToastState>(
                     builder: (context, state) {
                       // Build different UI based on the current state of the ItemBloc.
-                      if (state is ItemsLoading) {
+                      if (state is ToastLoading) {
                         return const Center(child: CircularProgressIndicator());
                         // Show a loading indicator while items are being fetched.
                       } else if (state is ItemsLoaded) {
@@ -83,7 +83,7 @@ class ItemView extends StatelessWidget {
   }
 
   // Builds the list view of items.
-  Widget _itemListView(List<Item> items) {
+  Widget _itemListView(List<Toast> items) {
     if (items.isEmpty) {
       return const Center(child: Text('No Items Found'));
       // Show a message when there are no items to display.
@@ -92,7 +92,7 @@ class ItemView extends StatelessWidget {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return ItemCard(itemIndex: index, item: items[index]);
+        return ToastCard(itemIndex: index, item: items[index]);
         // Create an ItemCard widget for each item in the list.
       },
     );
@@ -156,7 +156,7 @@ class ItemView extends StatelessWidget {
         ).then((value) {
           if (value != null) {
             // Dispatch a SortItemsEvent to the BLoC when a sorting option is selected.
-            BlocProvider.of<ItemBloc>(context).add(SortItemsEvent(value));
+            BlocProvider.of<ToastBloc>(context).add(SortItemsEvent(value));
           }
         });
       },

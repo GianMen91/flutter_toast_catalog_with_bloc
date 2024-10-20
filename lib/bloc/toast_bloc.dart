@@ -1,22 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
-import '../models/item.dart';  // Importing the Item model.
+import '../models/toast.dart';  // Importing the Item model.
 import '../database/database_helper.dart';  // Importing the database helper for local storage operations.
 import '../enums/sorting_option.dart';
-import '../repository/item_repository.dart';
-import 'item_event.dart';
-import 'item_state.dart';  // Importing sorting options enumeration.
+import '../repository/toast_repository.dart';
+import 'toast_event.dart';
+import 'toast_state.dart';  // Importing sorting options enumeration.
 
 // BLoC for managing the state and events related to items.
-class ItemBloc extends Bloc<ItemEvent, ItemState> {
+class ToastBloc extends Bloc<ToastEvent, ToastState> {
 
   final DatabaseHelper _dbHelper = DatabaseHelper();  // Instance of DatabaseHelper for local database operations.
-  List<Item>? _itemList;  // List to hold items fetched from the API or local storage.
-  final ItemRepository itemApiCall;
+  List<Toast>? _itemList;  // List to hold items fetched from the API or local storage.
+  final ToastRepository itemApiCall;
 
   // Constructor that initializes the BLoC with event handlers.
-  ItemBloc({required this.itemApiCall}): super(ItemsLoading()) {
+  ToastBloc({required this.itemApiCall}): super(ToastLoading()) {
     on<LoadItemsEvent>(_onLoadItems);
     on<SearchItemsEvent>(_onSearchItems);
     on<SortItemsEvent>(_onSortItems);
@@ -24,8 +24,8 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
 
   // Handler for LoadItemsEvent: Loads items from local storage or fetches from API if not available.
   Future<void> _onLoadItems(
-      LoadItemsEvent event, Emitter<ItemState> emit) async {
-    emit(ItemsLoading());  // Emit loading state while fetching items.
+      LoadItemsEvent event, Emitter<ToastState> emit) async {
+    emit(ToastLoading());  // Emit loading state while fetching items.
     try {
       _itemList = await _dbHelper.getItems();  // Fetch items from local storage.
       if (_itemList == null || _itemList!.isEmpty) {
@@ -45,9 +45,9 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
   }
 
   // Handler for SearchItemsEvent: Filters items based on the search query and emits the filtered list.
-  void _onSearchItems(SearchItemsEvent event, Emitter<ItemState> emit) {
+  void _onSearchItems(SearchItemsEvent event, Emitter<ToastState> emit) {
     if (_itemList != null) {
-      List<Item> filteredItems = _itemList!
+      List<Toast> filteredItems = _itemList!
           .where((item) =>
           item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
           .toList();
@@ -56,7 +56,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
   }
 
   // Handler for SortItemsEvent: Sorts items based on the selected sorting option and emits the sorted list.
-  void _onSortItems(SortItemsEvent event, Emitter<ItemState> emit) {
+  void _onSortItems(SortItemsEvent event, Emitter<ToastState> emit) {
     if (_itemList != null) {
       _itemList?.sort((a, b) {
         switch (event.sortingOption) {

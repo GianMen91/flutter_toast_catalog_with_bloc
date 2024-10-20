@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 // Represents an item with specific properties
-class Item {
+class Toast {
   final int id; // Unique identifier for the item
   final String name; // Name of the item
   final double price; // Price of the item
@@ -10,7 +10,7 @@ class Item {
   final DateTime lastSold; // Date and time when the item was last sold
 
   // Constructor to initialize an Item instance with required properties
-  Item({
+  Toast({
     required this.id,
     required this.name,
     required this.price,
@@ -19,8 +19,8 @@ class Item {
   });
 
   // Factory method to create an Item instance from a JSON map
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
+  factory Toast.fromJson(Map<String, dynamic> json) {
+    return Toast(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
       price: _parseDouble(json['price']),
@@ -30,7 +30,7 @@ class Item {
   }
 
   // Constructor to create an empty Item instance with default values
-  Item.empty()
+  Toast.empty()
       : id = 0,
         name = '',
         price = 0.0,
