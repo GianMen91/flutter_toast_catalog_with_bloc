@@ -17,6 +17,9 @@ class ItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemBloc = BlocProvider.of<ItemBloc>(context);
+
+    itemBloc.add(LoadItemsEvent());
     return Scaffold(
       // Scaffold provides a basic structure for the screen with an app bar and body.
       appBar: buildAppBar(context),
@@ -31,7 +34,8 @@ class ItemView extends StatelessWidget {
             SearchBox(
               onChanged: (query) {
                 // Dispatch a SearchItemsEvent to the BLoC when the search query changes.
-                BlocProvider.of<ItemBloc>(context).add(SearchItemsEvent(query));
+
+                itemBloc.add(SearchItemsEvent(query));
               },
             ),
             const SizedBox(height: defaultPadding / 2),
