@@ -15,7 +15,7 @@ class ToastCatalogApp extends StatelessWidget {
 
     return BlocProvider(
       // Initialize the itemBloc using the ItemRepository instance.
-      create: (context) => ToastBloc(itemApiCall: toastRepository),
+      create: (context) => ToastBloc(toastApiCall: toastRepository),
       // Wrap the widget tree with the WeatherBloc provider, so it can be accessed by any widget in the tree.
       child: const MaterialApp(
         // Disable the debug banner in the app.

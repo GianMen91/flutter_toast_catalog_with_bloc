@@ -12,11 +12,11 @@ import 'toast_state.dart';  // Importing sorting options enumeration.
 class ToastBloc extends Bloc<ToastEvent, ToastState> {
 
   final DatabaseHelper _dbHelper = DatabaseHelper();  // Instance of DatabaseHelper for local database operations.
-  List<Toast>? _itemList;  // List to hold items fetched from the API or local storage.
-  final ToastRepository itemApiCall;
+  List<Toast>? _toastList;  // List to hold items fetched from the API or local storage.
+  final ToastRepository toastApiCall;
 
   // Constructor that initializes the BLoC with event handlers.
-  ToastBloc({required this.itemApiCall}): super(ToastLoading()) {
+  ToastBloc({required this.toastApiCall}): super(ToastLoading()) {
     on<LoadItemsEvent>(_onLoadItems);
     on<SearchItemsEvent>(_onSearchItems);
     on<SortItemsEvent>(_onSortItems);
@@ -25,20 +25,24 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
   // Handler for LoadItemsEvent: Loads items from local storage or fetches from API if not available.
   Future<void> _onLoadItems(
       LoadItemsEvent event, Emitter<ToastState> emit) async {
+
     emit(ToastLoading());  // Emit loading state while fetching items.
+
     try {
-      _itemList = await _dbHelper.getItems();  // Fetch items from local storage.
-      if (_itemList == null || _itemList!.isEmpty) {
-        _itemList = await itemApiCall.fetchItems();
+      _toastList = await _dbHelper.getItems();  // Fetch items from local storage.
+      if (_toastList == null || _toastList!.isEmpty) {
+        _toastList = await toastApiCall.fetchToastList();
 
         // Insert items into the local database.
         await _dbHelper.deleteAllItems();  // Clear existing items in the database.
-        for (var item in _itemList!) {
+        for (var item in _toastList!) {
           await _dbHelper.insertItem(
               item); // Insert each item into the database.
         }
       }
-      emit(ItemsLoaded(_itemList!));  // Emit the loaded items state.
+
+      emit(ItemsLoaded(_toastList!));  // Emit the loaded items state.
+
     } on Exception catch (e) {
       emit(ItemsError('Failed to load items: ${e.toString()}'));  // Emit error state if an exception occurs.
     }
@@ -46,8 +50,8 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
 
   // Handler for SearchItemsEvent: Filters items based on the search query and emits the filtered list.
   void _onSearchItems(SearchItemsEvent event, Emitter<ToastState> emit) {
-    if (_itemList != null) {
-      List<Toast> filteredItems = _itemList!
+    if (_toastList != null) {
+      List<Toast> filteredItems = _toastList!
           .where((item) =>
           item.name.toLowerCase().contains(event.searchQuery.toLowerCase()))
           .toList();
@@ -57,8 +61,8 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
 
   // Handler for SortItemsEvent: Sorts items based on the selected sorting option and emits the sorted list.
   void _onSortItems(SortItemsEvent event, Emitter<ToastState> emit) {
-    if (_itemList != null) {
-      _itemList?.sort((a, b) {
+    if (_toastList != null) {
+      _toastList?.sort((a, b) {
         switch (event.sortingOption) {
           case SortingOption.name:
             return a.name.compareTo(b.name);  // Sort by item name.
@@ -71,7 +75,7 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
         }
       });
       emit(ItemsLoaded(List.from(
-          _itemList!)));  // Emit a new list instance to ensure the UI updates.
+          _toastList!)));  // Emit a new list instance to ensure the UI updates.
     }
   }
 }

@@ -10,7 +10,7 @@ import 'package:test_api/src/backend/state.dart' as test_api;
 
 // Main test function to test the Item class
 void main() {
-  group('Item Class Tests', () {
+  group('Toast Class Tests', () {
     // Test to ensure Item.fromJson creates an Item instance from JSON
     test('Item.fromJson should create an Item instance from JSON', () {
       // Sample JSON response representing an item

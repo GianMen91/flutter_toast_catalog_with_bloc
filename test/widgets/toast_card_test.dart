@@ -11,7 +11,7 @@ import 'package:test_api/src/backend/state.dart' as test_api;
 
 // Main test function to test the ItemCard widget
 void main() {
-  group('ItemCard Widget test', () {
+  group('ToastCard Widget test', () {
     testWidgets('All elements of ItemCard Widget are displayed correctly',
         (WidgetTester tester) async {
       // Creating a test item for the ItemCard widget

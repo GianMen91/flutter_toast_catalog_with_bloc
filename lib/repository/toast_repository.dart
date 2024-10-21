@@ -10,7 +10,7 @@ class ToastRepository {
       'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
 
   // Fetch items from the API and store them in local storage.
-  Future<List<Toast>> fetchItems() async {
+  Future<List<Toast>> fetchToastList() async {
     try {
       http.Response response = await http.get(Uri.parse(apiURL));  // Make an HTTP GET request to the API.
 
