@@ -46,8 +46,6 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
             }
           }
         }
-        List<Toast> mario = await _dbHelper.getToasts();
-        print(mario);
       }
 
       emit(state.copyWith(isLoading: false, items: _toastList));  // Emit the loaded items state.
