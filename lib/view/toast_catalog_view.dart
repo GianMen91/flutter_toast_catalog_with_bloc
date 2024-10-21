@@ -19,7 +19,7 @@ class ToastCatalogView extends StatelessWidget {
   Widget build(BuildContext context) {
     final toastBloc = BlocProvider.of<ToastBloc>(context);
 
-    toastBloc.add(LoadItemsEvent());
+    toastBloc.add(FetchToastEvent());
     return Scaffold(
       // Scaffold provides a basic structure for the screen with an app bar and body.
       appBar: buildAppBar(context),
@@ -35,7 +35,7 @@ class ToastCatalogView extends StatelessWidget {
               onChanged: (query) {
                 // Dispatch a SearchItemsEvent to the BLoC when the search query changes.
 
-                toastBloc.add(SearchItemsEvent(query));
+                toastBloc.add(SearchToastEvent(query));
               },
             ),
             const SizedBox(height: defaultPadding / 2),
@@ -156,7 +156,7 @@ class ToastCatalogView extends StatelessWidget {
         ).then((value) {
           if (value != null) {
             // Dispatch a SortItemsEvent to the BLoC when a sorting option is selected.
-            BlocProvider.of<ToastBloc>(context).add(SortItemsEvent(value));
+            BlocProvider.of<ToastBloc>(context).add(SortToastEvent(value));
           }
         });
       },

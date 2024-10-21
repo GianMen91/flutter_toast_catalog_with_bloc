@@ -17,14 +17,14 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
 
   // Constructor that initializes the BLoC with event handlers.
   ToastBloc({required this.toastApiCall}): super(ToastLoading()) {
-    on<LoadItemsEvent>(_onLoadItems);
-    on<SearchItemsEvent>(_onSearchItems);
-    on<SortItemsEvent>(_onSortItems);
+    on<FetchToastEvent>(_onLoadItems);
+    on<SearchToastEvent>(_onSearchItems);
+    on<SortToastEvent>(_onSortItems);
   }
 
   // Handler for LoadItemsEvent: Loads items from local storage or fetches from API if not available.
   Future<void> _onLoadItems(
-      LoadItemsEvent event, Emitter<ToastState> emit) async {
+      FetchToastEvent event, Emitter<ToastState> emit) async {
 
     emit(ToastLoading());  // Emit loading state while fetching items.
 
@@ -49,7 +49,7 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
   }
 
   // Handler for SearchItemsEvent: Filters items based on the search query and emits the filtered list.
-  void _onSearchItems(SearchItemsEvent event, Emitter<ToastState> emit) {
+  void _onSearchItems(SearchToastEvent event, Emitter<ToastState> emit) {
     if (_toastList != null) {
       List<Toast> filteredItems = _toastList!
           .where((item) =>
@@ -60,7 +60,7 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
   }
 
   // Handler for SortItemsEvent: Sorts items based on the selected sorting option and emits the sorted list.
-  void _onSortItems(SortItemsEvent event, Emitter<ToastState> emit) {
+  void _onSortItems(SortToastEvent event, Emitter<ToastState> emit) {
     if (_toastList != null) {
       _toastList?.sort((a, b) {
         switch (event.sortingOption) {
