@@ -18,7 +18,6 @@ class Toast {
     required this.lastSold,
   });
 
-  // Factory method to create an Item instance from a JSON map
   factory Toast.fromJson(Map<String, dynamic> json) {
     return Toast(
       id: json['id'] ?? 0,
@@ -28,6 +27,7 @@ class Toast {
       lastSold: _parseDateTime(json['last_sold']),
     );
   }
+
 
   // Constructor to create an empty Item instance with default values
   Toast.empty()
@@ -43,15 +43,15 @@ class Toast {
       'name': name,
       'price': price,
       'currency': currency,
-      'lastSold': lastSold.toIso8601String(),
+      'last_sold': lastSold.toIso8601String(),
     };
   }
 
-  // Private method to parse a dynamic value into a double, handling exceptions
+  // Updated _parseDouble
   static double _parseDouble(dynamic value) {
-    if (value is int) {
-      return value.toDouble();
-    } else if (value is String) {
+    if (value is double) return value;  // Directly return if already double
+    if (value is int) return value.toDouble();  // Convert int to double
+    if (value is String) {
       try {
         return double.parse(value);
       } on Exception catch (e) {
@@ -60,10 +60,10 @@ class Toast {
         }
       }
     }
-    return 0.0;
+    return 0.0;  // Return default if parsing fails
   }
 
-  // Private method to parse a dynamic value into a DateTime
+// Updated _parseDateTime
   static DateTime _parseDateTime(dynamic value) {
     if (value is String) {
       try {
@@ -74,8 +74,9 @@ class Toast {
         }
       }
     }
-    return DateTime.now();
+    return DateTime.now();  // Return now if parsing fails
   }
+
 
   // Method to format the lastSold date as a string in a specific format
   String formattedLastSold() {

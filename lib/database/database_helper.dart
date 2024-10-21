@@ -17,7 +17,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'items_database.db');
+    String path = join(await getDatabasesPath(), 'toasts_database.db');
     return await openDatabase(
       path,
       version: 1,
@@ -27,7 +27,7 @@ class DatabaseHelper {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE items(
+      CREATE TABLE toasts(
         id INTEGER PRIMARY KEY,
         name TEXT,
         price REAL,
@@ -37,33 +37,33 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<int> insertItem(Toast item) async {
+  Future<int> insertToast(Toast toast) async {
     final db = await database;
-    return await db.insert('items', item.toJson(),
+    return await db.insert('toasts', toast.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<Toast>> getItems() async {
+  Future<List<Toast>> getToasts() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('items');
+    final List<Map<String, dynamic>> maps = await db.query('toasts');
     return List.generate(maps.length, (i) {
       return Toast.fromJson(maps[i]);
     });
   }
 
-  Future<int> updateItem(Toast item) async {
+  Future<int> updateToast(Toast toast) async {
     final db = await database;
-    return await db.update('items', item.toJson(),
-        where: 'id = ?', whereArgs: [item.id]);
+    return await db.update('toasts', toast.toJson(),
+        where: 'id = ?', whereArgs: [toast.id]);
   }
 
-  Future<int> deleteItem(int id) async {
+  Future<int> deleteToast(int id) async {
     final db = await database;
-    return await db.delete('items', where: 'id = ?', whereArgs: [id]);
+    return await db.delete('toasts', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<void> deleteAllItems() async {
+  Future<void> deleteAlltoasts() async {
     final db = await database;
-    await db.delete('items');
+    await db.delete('toasts');
   }
 }

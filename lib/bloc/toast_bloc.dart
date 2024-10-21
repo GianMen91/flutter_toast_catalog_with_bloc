@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
@@ -27,15 +28,26 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
     emit(state.copyWith(isLoading: true));  // Emit loading state while fetching items.
 
     try {
-      _toastList = await _dbHelper.getItems();  // Fetch items from local storage.
+      _toastList = await _dbHelper.getToasts();  // Fetch items from local storage.
       if (_toastList == null || _toastList!.isEmpty) {
         _toastList = await toastApiCall.fetchToastList();
 
         // Insert items into the local database.
-        await _dbHelper.deleteAllItems();  // Clear existing items in the database.
-        for (var item in _toastList!) {
-          await _dbHelper.insertItem(item); // Insert each item into the database.
+        await _dbHelper.deleteAlltoasts();  // Clear existing items in the database.
+        for (var toast in _toastList!) {
+          if (kDebugMode) {
+            print('Inserting toast: ${toast.toJson()}');
+          }
+          try {
+            await _dbHelper.insertToast(toast);
+          } on Exception catch (e) {
+            if (kDebugMode) {
+              print('Error inserting toast: $e');
+            }
+          }
         }
+        List<Toast> mario = await _dbHelper.getToasts();
+        print(mario);
       }
 
       emit(state.copyWith(isLoading: false, items: _toastList));  // Emit the loaded items state.
@@ -54,10 +66,12 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
     }
   }
 
-  // Handler for SortToastEvent: Sorts items based on the selected sorting option and emits the sorted list.
+// Handler for SortToastEvent: Sorts items based on the selected sorting option and emits the sorted list.
   void _onSortItems(SortToastEvent event, Emitter<ToastState> emit) {
     if (_toastList != null) {
-      _toastList?.sort((a, b) {
+      // Create a new list for sorted items
+      List<Toast> sortedItems = List.from(_toastList!);
+      sortedItems.sort((a, b) {
         switch (event.sortingOption) {
           case SortingOption.name:
             return a.name.compareTo(b.name);  // Sort by item name.
@@ -69,7 +83,7 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
             return 0;  // Default case if no valid sorting option is provided.
         }
       });
-      emit(state.copyWith(items: List.from(_toastList!)));  // Emit a new list instance to ensure the UI updates.
+      emit(state.copyWith(items: sortedItems));  // Emit the sorted items state.
     }
   }
 }
