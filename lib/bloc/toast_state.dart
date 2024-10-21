@@ -1,21 +1,31 @@
-// Abstract class representing different states of the ItemBloc.
+import 'package:equatable/equatable.dart';
 import '../models/toast.dart';
 
-abstract class ToastState {}
+class ToastState extends Equatable {
+  final bool isLoading;  // Is loading happening?
+  final List<Toast> items;  // Loaded toast items.
+  final String? errorMessage;  // Potential error messages.
 
-// State indicating that items are currently being loaded.
-class ToastLoading extends ToastState {}
+  // Constructor with default values
+  const ToastState({
+    this.isLoading = false,
+    this.items = const [],
+    this.errorMessage,
+  });
 
-// State representing that items have been successfully loaded.
-class ItemsLoaded extends ToastState {
-  final List<Toast> items;
+  @override
+  List<Object?> get props => [isLoading, items, errorMessage];
 
-  ItemsLoaded(this.items);
-}
-
-// State representing an error occurred while loading items.
-class ItemsError extends ToastState {
-  final String message;
-
-  ItemsError(this.message);
+  // CopyWith method to allow partial updates to the state
+  ToastState copyWith({
+    bool? isLoading,
+    List<Toast>? items,
+    String? errorMessage,
+  }) {
+    return ToastState(
+      isLoading: isLoading ?? this.isLoading,
+      items: items ?? this.items,
+      errorMessage: errorMessage,
+    );
+  }
 }

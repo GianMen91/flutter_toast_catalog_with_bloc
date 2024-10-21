@@ -19,36 +19,30 @@ class ToastCatalogView extends StatelessWidget {
   Widget build(BuildContext context) {
     final toastBloc = BlocProvider.of<ToastBloc>(context);
 
+    // Dispatch the FetchToastEvent to load items when the widget builds.
     toastBloc.add(FetchToastEvent());
+
     return Scaffold(
-      // Scaffold provides a basic structure for the screen with an app bar and body.
-      appBar: buildAppBar(context),
-      // Build the app bar with title and sorting options.
-      backgroundColor: appMainColor,
-      // Set the background color of the screen.
+      appBar: buildAppBar(context), // Build the app bar with title and sorting options.
+      backgroundColor: appMainColor, // Set the background color of the screen.
       body: SafeArea(
         bottom: false,
-        // Prevents the body content from being obscured by system UI (e.g., the home indicator on iOS).
         child: Column(
           children: <Widget>[
             SearchBox(
               onChanged: (query) {
-                // Dispatch a SearchItemsEvent to the BLoC when the search query changes.
-
+                // Dispatch a SearchToastEvent to the BLoC when the search query changes.
                 toastBloc.add(SearchToastEvent(query));
               },
             ),
-            const SizedBox(height: defaultPadding / 2),
-            // Add some space below the search box.
+            const SizedBox(height: defaultPadding / 2), // Add some space below the search box.
             Expanded(
               child: Stack(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 70),
-                    // Offset the container to avoid overlapping with the app bar.
+                    margin: const EdgeInsets.only(top: 70), // Offset the container to avoid overlapping with the app bar.
                     decoration: const BoxDecoration(
-                      color: backgroundColor,
-                      // Set the background color for the container.
+                      color: backgroundColor, // Set the background color for the container.
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
                         topRight: Radius.circular(40),
@@ -57,19 +51,19 @@ class ToastCatalogView extends StatelessWidget {
                   ),
                   BlocBuilder<ToastBloc, ToastState>(
                     builder: (context, state) {
-                      // Build different UI based on the current state of the ItemBloc.
-                      if (state is ToastLoading) {
+                      // Build different UI based on the current state of the ToastBloc.
+                      if (state.isLoading) {
                         return const Center(child: CircularProgressIndicator());
                         // Show a loading indicator while items are being fetched.
-                      } else if (state is ItemsLoaded) {
+                      } else if (state.items.isNotEmpty) {
                         return _itemListView(state.items);
                         // Display the list of items once they are loaded.
-                      } else if (state is ItemsError) {
-                        return Center(child: Text(state.message));
+                      } else if (state.errorMessage != null) {
+                        return Center(child: Text(state.errorMessage!));
                         // Show an error message if there was an issue loading items.
                       } else {
-                        return const Center(child: Text('Unknown state'));
-                        // Handle any unknown state with a default message.
+                        return const Center(child: Text('No Items Found'));
+                        // Show a message when there are no items to display.
                       }
                     },
                   ),
@@ -84,16 +78,11 @@ class ToastCatalogView extends StatelessWidget {
 
   // Builds the list view of items.
   Widget _itemListView(List<Toast> items) {
-    if (items.isEmpty) {
-      return const Center(child: Text('No Items Found'));
-      // Show a message when there are no items to display.
-    }
-
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
         return ToastCard(itemIndex: index, item: items[index]);
-        // Create an ItemCard widget for each item in the list.
+        // Create a ToastCard widget for each item in the list.
       },
     );
   }
@@ -155,7 +144,7 @@ class ToastCatalogView extends StatelessWidget {
           ],
         ).then((value) {
           if (value != null) {
-            // Dispatch a SortItemsEvent to the BLoC when a sorting option is selected.
+            // Dispatch a SortToastEvent to the BLoC when a sorting option is selected.
             BlocProvider.of<ToastBloc>(context).add(SortToastEvent(value));
           }
         });
