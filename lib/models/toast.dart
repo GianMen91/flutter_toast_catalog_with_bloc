@@ -43,7 +43,7 @@ class Toast {
       'name': name,
       'price': price,
       'currency': currency,
-      'last_sold': lastSold.toIso8601String(),
+      'lastSold': lastSold.toIso8601String(),
     };
   }
 
