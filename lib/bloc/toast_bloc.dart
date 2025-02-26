@@ -76,9 +76,7 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
           case SortingOption.lastSold:
             return a.lastSold.compareTo(b.lastSold);  // Sort by last sold date.
           case SortingOption.price:
-            return a.price.compareTo(b.price);  // Sort by item price.
-          default:
-            return 0;  // Default case if no valid sorting option is provided.
+            return a.price.compareTo(b.price);  // Default case if no valid sorting option is provided.
         }
       });
       emit(state.copyWith(items: sortedItems));  // Emit the sorted items state.
